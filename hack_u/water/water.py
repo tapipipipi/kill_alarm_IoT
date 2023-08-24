@@ -1,18 +1,26 @@
-def water():
-    strength = input("起こし方を選んでください\nhigh,middle,low\n")
-    match strength:
-        case "high":
-            high()
-        case "middle":
-            middle()
-        case "low":
-            low()
+import time
+from threading import Thread
 
-def high():
-    print("water high")
+timer = True
+def water():
+    # #pin番号
+    # gpio = 10
     
-def middle():
-    print("water middle")
+    # #pigpioの準備
+    # pi = "pigpio.pi()"
     
-def low():
-    print("water low")
+    # # 蛇口ピンを出力に設定
+    # pi.set_mode(gpio,"pigpio.OUTPUT")
+
+    # # スイッチピンを入力、プルアップに設定
+    # pi.set_mode("pigpio".INPUT)
+    # pi.set_pull_up_down("pigpio.PUD_UP")
+
+    #pi.write(gpio,1)        # 水発射
+    print("on")
+    time.sleep(0.2)     # time秒待機
+    #pi.write(gpio,0)        # 水停止
+    print("off")
+    print("succes")
+    # # pigpioから切断
+    # pi.stop()
