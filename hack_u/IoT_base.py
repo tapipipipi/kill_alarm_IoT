@@ -5,24 +5,19 @@ from vibrasion import vibration
 from blow import blow
 from sound import sound
 
-
 payload = input("起こし方を選んでください\nlight,water,vibration,blow,sound\n")
-print()
+#print()
 
-match payload:
-    case "light":   #光
+#def call_payload(payload):
+if payload == "light":
         light.light()
-    
-    case "water":   #水
+elif payload == "water":
         water.water()
-        
-    case "vibration":   #振
+elif payload == "vibration":
         vibration.vibration()
-        
-    case "blow":    #打
+elif payload == "blow":
         blow.blow()
-    
-    case "sound":   #音
+elif payload == "sound":
         sound.sound()
 
 # payload_data = ["light","water","vibration","blow","sound"]

@@ -1,52 +1,49 @@
-import time
-from threading import Thread
-#from datetime import datetime
+from threading import Thread    #起動時間を並列で作動させるモジュール
+import pigpio # pigpioモジュールを使用
+import time #時間数えるモジュール
+#以下、ピン番号をインポートするモジュール
+from IoT_setting import gpio_sw_in
+from IoT_setting import gpio_sw_led
+from IoT_setting import gpio_valve
 
 timer = True
-def vibration_contlall(interval):
-    # #pin番号
-    # gpio = 10
+def vibration():
+    global timer
     
-    # #pigpioの準備
-    # pi = "pigpio.pi()"
+    #pigpioの準備
+    pi = pigpio.pi()
     
-    # # 振動ピンを出力に設定
-    # pi.set_mode(gpio,"pigpio.OUTPUT")
+    # ピンを出力に設定
+    pi.set_mode(gpio_valve,pigpio.OUTPUT)  
+    pi.set_mode(gpio_sw_led,pigpio.OUTPUT)  #LED_SW
 
-    # # スイッチピンを入力、プルアップに設定
-    # pi.set_mode("pigpio".INPUT)
-    # pi.set_pull_up_down("pigpio.PUD_UP")
+    # スイッチピンを入力、プルアップに設定
+    pi.set_mode(gpio_sw_in,pigpio.INPUT)
+    pi.set_pull_up_down(gpio_sw_in,pigpio.PUD_UP)
     
-    
+    # スイッチの状態を取得
+    sw = pi.read(gpio_sw_in)
+
+    timer = True
     #30秒後にoffにするタイマー
     def control_timer():
         global timer
         time.sleep(30)
-        timer = False
+        timer = False   
 
     #タイマースタート
     thread = Thread(target=control_timer)
     thread.start()
+    
+    pi.write(gpio_sw_led,1)     # LED_SW点灯
     while timer:
-        #pi.write(gpio,1)        # 振動開始
+        pi.write(gpio_valve,1)        # LED点灯
         print("on")
-        time.sleep(interval)     # time秒待機
-        #pi.write(gpio,0)        # 振動終了
-        print("off")
-        time.sleep(interval)     # time秒待機
+        if sw == 0:                 #スイッチを押した場合止まる
+            break
 
-    #pi.write(gpio,0)        # 振動終了
-    print("off")
-    print("succes")
-    # # pigpioから切断
-    # pi.stop()
-
-def vibration():
-    strength = input("強さを選んでください\nhigh,middle,low\n")
-    match strength:
-        case "high":
-            vibration_contlall(0.5) #0.5秒間隔
-        case "middle":
-            vibration_contlall(1.5) #1秒感覚
-        case "low":
-            vibration_contlall(3) #3秒感覚
+    pi.write(gpio_valve,0)        # LED消灯
+    pi.write(gpio_sw_led,0)         # LED_SW消灯
+    print("Lsw_off")   
+    #pigpioから切断
+    pi.stop()

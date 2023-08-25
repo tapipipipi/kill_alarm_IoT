@@ -15,5 +15,3 @@ while timer:
     time.sleep(0.5)     # time秒待機
     print("off")        # LED消灯
     time.sleep(0.5)     # time秒待機
-    
->>>>>>> feature/Iot_control_statement
